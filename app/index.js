@@ -72,7 +72,7 @@ client.on("message", async message => {
     let noun = config.noun[randomNoun];
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
     
-    message.channel.send(`${member.user.tag} thou art ${adj} ${noun}`);
+    message.channel.send(`${member.user} thou art ${adj} ${noun}`);
   }
 });
 
