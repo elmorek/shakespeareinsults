@@ -53,16 +53,18 @@ client.on("message", async message => {
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
-  if(message.content.indexOf(config.prefix) !== 0) return;
+  if (message.content.endsWith('Shakespeare'+config.prefix) === false) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
+  const args = message.content.split(/ +/g);
+  const args = args.reverse();
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
   
-  if(command === "insult") {
+  if(command === "Shakespeare") {
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -70,7 +72,7 @@ client.on("message", async message => {
     randomNoun = getRandomNumber(0, config.noun.length);
     let adj = config.adj[randomAdj];
     let noun = config.noun[randomNoun];
-    let member = message.mentions.members.first() || message.guild.members.get(args[0]);
+    let member = message.mentions.members.first() || 'Thou';
     
     message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
   }
