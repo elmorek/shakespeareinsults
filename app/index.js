@@ -74,6 +74,9 @@ client.on("message", async message => {
     
     message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
   }
+  if (command === "help") {
+    message.channel.send('use !insult an a mention to generate an insult');
+  }
 });
 
 client.login(config.token);
