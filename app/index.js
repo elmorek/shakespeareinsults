@@ -1,3 +1,15 @@
+// Just to avoid Heroku crap
+const express = require('express');
+const app = express();
+
+app.set('port', (process.env.PORT || 5000));
+
+app.get('/', function(request, response) {
+  const result = 'App is running';
+  response.send(result);
+}).listen(app.get('port'), function() {
+  console.log('App is running, server is listening on port ', app.get('port'));
+});
 // Load up the discord.js library
 const Discord = require("discord.js");
 
@@ -52,7 +64,7 @@ client.on("message", async message => {
   
   if(command === "insult") {
     function getRandomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min)) + min;
     }
     randomAdj = getRandomNumber(0, config.adj.length);
     randomNoun = getRandomNumber(0, config.noun.length);
