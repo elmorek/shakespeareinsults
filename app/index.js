@@ -60,8 +60,11 @@ client.on("message", async message => {
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
   let args = message.content.trim().split(/ +/g);
+  console.log(args);
   args = args.reverse();
+  console.log(args);
   const command = args.shift().toLowerCase();
+  console.log(command);
   
   if(command === "Shakespeare!") {
     function getRandomNumber(min, max) {
