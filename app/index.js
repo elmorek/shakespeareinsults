@@ -55,9 +55,9 @@ client.on("message", async message => {
   // which is set in the configuration file.
 
   if (message.content.includes("asshole", "idiot", "bitch")) {
-    message.channel.send(`Do you kiss your mother with that mouth, ${message.author}?`);
+    message.channel.send(`Do you kiss your mother with that mouth, ${message.author}?`)
   }
-  if(message.content.contains("Shakespeare") == false && message.content.endsWith("Shakespeare?") == false ) return;
+  if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
