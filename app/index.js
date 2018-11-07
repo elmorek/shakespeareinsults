@@ -53,7 +53,7 @@ client.on("message", async message => {
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
-  if(message.content.endsWith("Shakespeare!") == false) return;
+  if(message.content.endsWith("Shakespeare!") == false || message.content.endsWith("Shakespeare?") == false) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
@@ -66,7 +66,7 @@ client.on("message", async message => {
   const command = args.shift().toLowerCase();
   console.log(command);
   
-  if(command === "shakespeare!") {
+  if(command === "shakespeare!" || "shakespeare?") {
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -84,9 +84,9 @@ client.on("message", async message => {
         }
       }
       message.channel.send('So... you think that is funny, huh?');
-      wait(4000)
+      wait(2000);
       message.channel.send("Like let's make fun of the bot because he doesn't care");
-      wait(4000)
+      wait(2000);
       message.channel.send(`Let me tell you something, ${message.author}, thou art ${adj} ${noun}!`);
     } else {
       message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
@@ -97,4 +97,4 @@ client.on("message", async message => {
   }
 });
 
-client.login(config.token);
+client.login(process.env.DISCORD_TOKEN);
