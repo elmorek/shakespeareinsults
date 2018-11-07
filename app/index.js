@@ -55,7 +55,7 @@ client.on("message", async message => {
   // which is set in the configuration file.
 
   if (message.content.includes("asshole" || "idiot" || "bitch")) {
-    message.channel.send(`Do you kiss your mother with that mouth, ${message.author}?`)
+    message.channel.send(`Scoundrel, rogue, knave! Doth thee kisseth thy mother with such mouth, ${message.author}?`)
   }
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
