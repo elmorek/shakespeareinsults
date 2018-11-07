@@ -66,7 +66,7 @@ client.on("message", async message => {
   const command = args.shift().toLowerCase();
   console.log(command);
   
-  if(command === "Shakespeare!") {
+  if(command === "shakespeare!") {
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
