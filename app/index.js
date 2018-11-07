@@ -53,16 +53,17 @@ client.on("message", async message => {
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
-  if(message.content.indexOf(config.prefix) !== 0) return;
+  if(message.content.endsWith(config.prefix) == false) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  const args = message.content.trim().split(/ +/g);
+  args = args.reverse();
   const command = args.shift().toLowerCase();
   
-  if(command === "insult") {
+  if(command === "Shakespeare!") {
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -71,8 +72,22 @@ client.on("message", async message => {
     let adj = config.adj[randomAdj];
     let noun = config.noun[randomNoun];
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
-    
-    message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
+    if (message.isMentioned(client.user)) {
+      function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while(end < start + ms) {
+          end = new Date().getTime();
+        }
+      }
+      message.channel.send('So... you think that is funny, huh?');
+      wait(4000)
+      message.channel.send("Like let's make fun of the bot because he doesn't care");
+      wait(4000)
+      message.channel.send(`Let me tell you something, ${message.author}, thou art ${adj} ${noun}!`);
+    } else {
+      message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
+    }
   }
   if (command === "help") {
     message.channel.send('use !insult an a mention to generate an insult');
