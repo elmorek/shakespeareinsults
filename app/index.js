@@ -54,7 +54,7 @@ client.on("message", async message => {
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
 
-  if (message.content.includes("asshole", "idiot", "bitch")) {
+  if (message.content.includes("asshole" || "idiot" || "bitch")) {
     message.channel.send(`Do you kiss your mother with that mouth, ${message.author}?`)
   }
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
