@@ -61,7 +61,7 @@ client.on("message", async message => {
   var comebacks = config.comebacks;
   for (var i=0; i<swearwords.length; i++) {
     if (message.content.includes(swearwords[i])) {
-      message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}?`);
+      message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
     }
   }
 
