@@ -86,18 +86,7 @@ client.on("message", async message => {
     let noun = config.noun[randomNoun];
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
     if (message.isMentioned(client.user)) {
-      function wait(ms) {
-        var start = new Date().getTime();
-        var end = start;
-        while(end < start + ms) {
-          end = new Date().getTime();
-        }
-      }
-      message.channel.send('So... you think that is funny, huh?');
-      wait(2000);
-      message.channel.send("Like let's make fun of the bot because he doesn't care");
-      wait(2000);
-      message.channel.send(`Let me tell you something, ${message.author}, thou art ${adj} ${noun}!`);
+      message.channel.send(`${message.author}, thou art ${adj} ${noun}!`);
     } else {
       message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
     }
