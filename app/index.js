@@ -54,7 +54,7 @@ client.on("message", async message => {
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
   var swearwords = config.insults;
-  for (var i=0; i>swearwords.length; i++) {
+  for (var i=0; i<swearwords.length; i++) {
     if (message.content.includes(swearwords[i])) {
       message.channel.send(`Scoundrel, rogue, knave! Doth thee kisseth thy mother with such mouth, ${message.author}?`);
     }
