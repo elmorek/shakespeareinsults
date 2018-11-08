@@ -62,6 +62,7 @@ client.on("message", async message => {
   for (var i=0; i<swearwords.length; i++) {
     if (message.content.includes(swearwords[i])) {
       message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
+      break;
     }
   }
 
