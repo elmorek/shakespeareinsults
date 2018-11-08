@@ -53,10 +53,13 @@ client.on("message", async message => {
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
-
-  if (message.content.includes("asshole") || message.content.includes("fucking") || message.content.includes("bitch") || message.content.includes("idiot")) {
-    message.channel.send(`Scoundrel, rogue, knave! Doth thee kisseth thy mother with such mouth, ${message.author}?`)
+  var swearwords = config.insults;
+  for (var i=0; i>swearwords.length; i++) {
+    if (message.content.includes(swearwords[i])) {
+      message.channel.send(`Scoundrel, rogue, knave! Doth thee kisseth thy mother with such mouth, ${message.author}?`);
+    }
   }
+
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
