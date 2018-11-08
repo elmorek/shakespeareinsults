@@ -45,6 +45,10 @@ client.on("guildDelete", guild => {
 
 
 client.on("message", async message => {
+
+  function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
   // This event will run on every single message received, from any channel or DM.
   
   // It's good practice to ignore other bots. This also makes your bot ignore itself
@@ -54,9 +58,10 @@ client.on("message", async message => {
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
   var swearwords = config.insults;
+  var comebacks = config.comebacks;
   for (var i=0; i<swearwords.length; i++) {
     if (message.content.includes(swearwords[i])) {
-      message.channel.send(`Scoundrel, rogue, knave! Doth thee kisseth thy mother with such mouth, ${message.author}?`);
+      message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}?`);
     }
   }
 
@@ -74,9 +79,6 @@ client.on("message", async message => {
   console.log(command);
   
   if(command === "shakespeare!" || "shakespeare?") {
-    function getRandomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    }
     randomAdj = getRandomNumber(0, config.adj.length);
     randomNoun = getRandomNumber(0, config.noun.length);
     let adj = config.adj[randomAdj];
