@@ -60,7 +60,7 @@ client.on("message", async message => {
   var swearwords = config.insults;
   var comebacks = config.comebacks;
   for (var i=0; i<swearwords.length; i++) {
-    if (message.content.includes(swearwords[i])) {
+    if (message.content.toLowerCase().includes(swearwords[i])) {
       message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
       break;
     }
