@@ -82,7 +82,7 @@ bot.on("message", async message => {
       if (err) {
         console.log(err.stack);
       } else {
-        console.log(res.rows[0].id);
+        console.log(res);
       }
       client.end();
     });
