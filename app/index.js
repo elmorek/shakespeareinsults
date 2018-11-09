@@ -2,6 +2,11 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const { pgClient } = require('pg');
+const dbClient = new pgClient({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -21,8 +26,8 @@ const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
-const featurelist = require("./featurelist.json");
-let features = {};
+const features = require("./featurelist.json");
+let features = features;
 
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
@@ -71,25 +76,14 @@ client.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
-    function getFeatureIdNumber() {
-      let idNumbers = [];
-      for (var i = 0; i< featurelist.features.length; i++) {
-        idNumbers.push(featurelist.features[i].id);
-      }
-      return Math.max(...idNumbers)+1;
-    }
-    featurelist.features.push({ "id" : getFeatureIdNumber(), "description" : message.content, "status" : "pending"});
-    fs.writeFileSync("./featurelist.json", featurelist, function(err) {
-      if (err) {
-        return console.log(err);
-      }
-    });
-    console.log(featurelist);
+    client.connect();
+    client.query(`INSERT INTO features (description, status) VALUES (${message.content}, 'pending')`);
   }
+  
   if(message.content.startsWith('listfeatures!')) {
     let listoffeatures = `List of features:\n\n`;
-    for (var i = 0; i< featurelist.features.length; i++) {
-      listoffeatures+`**id: ** ${featurelist.features[i].id}\n**description:** ${featurelist.features[i].description}\n**status:** ${featurelist.features[i].status}\n\n`;
+    for (var i = 0; i< features.features.length; i++) {
+      listoffeatures+`**id: ** ${features.features[i].id}\n**description:** ${features.features[i].description}\n**status:** ${features.features[i].status}\n\n`;
     }
     console.log(listoffeatures);
     message.channel.send(listoffeatures);
