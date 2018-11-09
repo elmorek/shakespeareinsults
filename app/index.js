@@ -70,7 +70,7 @@ bot.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
-    const pool = new Pool({
+    const client = new Client({
       connectionString: process.env.DATABASE_URL,
       ssl: true
     });
@@ -78,23 +78,23 @@ bot.on("message", async message => {
     const text = 'INSERT INTO features(description, status) VALUES($1, $2);';
     const values = [message.content, 'pending'];
     
-    pool.query(text, values, (err, res) => {
+    client.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack);
       } else {
         console.log(res.rows[0]);
       }
-      pool.end();
+      client.end();
     });
   }
 
   if(message.content.startsWith('listfeatures!')) {
-    const pool = new Pool({
+    const client = new Client({
       connectionString: process.env.DATABASE_URL,
       ssl: true
     });
     let listoffeatures = `List of features:\n\n`;
-    pool.query('SELECT * FROM features;', (err, res) => {
+    client.query('SELECT * FROM features;', (err, res) => {
       if (err) {
         console.log(err.stack)
       } else {
@@ -102,7 +102,7 @@ bot.on("message", async message => {
           listoffeatures+=`**ID:** ${res.rows[i].id}\n**Description:** ${res.rows[i].description}\n\n**Status:** ${res.rows[i].status}`;
         }
       }
-      pool.end();
+      client.end();
       message.channel.send(listoffeatures);
     });
   }
