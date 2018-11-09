@@ -3,10 +3,6 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const { Client } = require('pg');
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -74,6 +70,10 @@ bot.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl: true,
+    });
     client.connect();
     const text = 'INSERT INTO features(description, status) VALUES($1, $2)';
     const values = [message.content, 'pending'];
@@ -89,6 +89,10 @@ bot.on("message", async message => {
   }
 
   if(message.content.startsWith('listfeatures!')) {
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl: true,
+    });
     let listoffeatures = `List of features:\n\n`;
     client.connect();
     client.query('SELECT * FROM features', (err, res) => {
