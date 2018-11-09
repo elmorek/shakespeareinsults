@@ -76,7 +76,7 @@ bot.on("message", async message => {
     });
 
     const text = 'INSERT INTO features(description, status) VALUES($1, $2);';
-    const values = [message.content, 'pending'];
+    const values = [message.content.trim(11), 'pending'];
     await client.connect();
     client.query(text, values, (err, res) => {
       if (err) {
@@ -100,7 +100,7 @@ bot.on("message", async message => {
         console.log(err.stack)
       } else {
         for (var i = 0; i<res.rows.length;i++) {
-          listoffeatures+=`**ID:** ${res.rows[i].id}\n**Description:** ${res.rows[i].description}\n\n**Status:** ${res.rows[i].status}`;
+          listoffeatures+=`**ID:** ${res.rows[i].id}\n**Description:** ${res.rows[i].description}\n**Status:** ${res.rows[i].status}\n\n`;
         }
       }
       client.end();
