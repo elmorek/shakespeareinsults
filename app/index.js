@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-const { Pool, Client } = require('pg');
+const Client = require('pg');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -77,7 +77,7 @@ bot.on("message", async message => {
 
     const text = 'INSERT INTO features(description, status) VALUES($1, $2);';
     const values = [message.content, 'pending'];
-    
+    await client.connect();
     client.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack);
@@ -94,6 +94,7 @@ bot.on("message", async message => {
       ssl: true
     });
     let listoffeatures = `List of features:\n\n`;
+    await client.connect();
     client.query('SELECT * FROM features;', (err, res) => {
       if (err) {
         console.log(err.stack)
