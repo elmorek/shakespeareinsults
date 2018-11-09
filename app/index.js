@@ -20,6 +20,7 @@ const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
+
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
 
@@ -64,6 +65,32 @@ client.on("message", async message => {
       message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
       break;
     }
+  }
+
+  if(message.content.startsWith('addfeature!')) {
+    const fs = require('fs');
+    const featurelist = require("./featurelist.json");
+    function getFeatureIdNumber() {
+      let idNumbers = [];
+      for (var i = 0; i< featurelist.features.length; i++) {
+        idNumbers.push(featurelist.features[i].id);
+      }
+      return Math.max(...idNumbers)+1;
+    }
+    featurelist.features.push({ "id" : getFeatureIdNumber(), "description" : message.content, "status" : "pending"});
+    fs.writeFileSync("./featurelist.json", featurelist, function(err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+  }
+  if(message.content.startsWith('listfeatures!')) {
+    const featurelist = require("./featurelist.json");
+    let listoffeatures = ``;
+    for (var i = 0; i< featurelist.features.length; i++) {
+      listoffeatures + `**id: ** ${featurelist.features[i].id}\n**description:** ${featurelist.features[i].description}\n**status:** ${featurelist.features[i].status}\n\n`;
+    }
+    message.channel.send(listoffeatures);
   }
 
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
