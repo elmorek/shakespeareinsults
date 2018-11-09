@@ -2,8 +2,8 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-const { pgClient } = require('pg');
-const dbClient = new pgClient({
+const { Client } = require('pg');
+const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
@@ -22,7 +22,7 @@ const Discord = require("discord.js");
 // This is your client. Some people call it `bot`, some people call it `self`, 
 // some might call it `cootchie`. Either way, when you see `client.something`, or `bot.something`,
 // this is what we're refering to. Your client.
-const client = new Discord.Client();
+const bot = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
@@ -30,28 +30,28 @@ const config = require("./config.json");
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
 
-client.on("ready", () => {
+bot.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
+  console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`); 
   // Example of changing the bot's playing game to something useful. `client.user` is what the
   // docs refer to as the "ClientUser".
-  client.user.setActivity(`I am sick when I do look on thee`);
+  bot.user.setActivity(`I am sick when I do look on thee`);
 });
 
-client.on("guildCreate", guild => {
+bot.on("guildCreate", guild => {
   // This event triggers when the bot joins a guild.
   console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-  client.user.setActivity(`I am sick when I do look on thee`);
+  bot.user.setActivity(`I am sick when I do look on thee`);
 });
 
-client.on("guildDelete", guild => {
+bot.on("guildDelete", guild => {
   // this event triggers when the bot is removed from a guild.
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setActivity(`I am sick when I do look on thee`);
+  bot.user.setActivity(`I am sick when I do look on thee`);
 });
 
 
-client.on("message", async message => {
+bot.on("message", async message => {
 
   function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -74,29 +74,34 @@ client.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
-    dbClient.connect();
-    const query = 'INSERT INTO features(description, status) VALUES($1, $2)';
+    client.connect();
+    const text = 'INSERT INTO features(description, status) VALUES($1, $2)';
     const values = [message.content, 'pending'];
     
-    dbClient.query(query, values, (err, res)) => {
+    client.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack);
       } else {
         console.log(res.rows[0]);
       }
-    }
-    dbClient.end();
+    });
+    client.end();
   }
 
   if(message.content.startsWith('listfeatures!')) {
     let listoffeatures = `List of features:\n\n`;
-    for (var i = 0; i< features.features.length; i++) {
-      listoffeatures+`**id: ** ${features.features[i].id}\n**description:** ${features.features[i].description}\n**status:** ${features.features[i].status}\n\n`;
-    }
-    console.log(listoffeatures);
-    message.channel.send(listoffeatures);
+    client.connect();
+    client.query('SELECT * FROM features', (err, res) => {
+      if (err) {
+        console.log(err.stack)
+      } else {
+        for (var i = 0; i<res.rows.length;i++) {
+          listoffeatures+=`**ID:** ${res.rows[i].id}\n**Description:** ${res.rows[i].description}\n\n**Status:** ${res.rows[i].status}`;
+        }
+      }
+      message.channel.send(listoffeatures);
+    });
   }
-
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
   // Here we separate our "command" name, and our "arguments" for the command. 
@@ -116,7 +121,7 @@ client.on("message", async message => {
     let adj = config.adj[randomAdj];
     let noun = config.noun[randomNoun];
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
-    if (message.isMentioned(client.user)) {
+    if (message.isMentioned(bot.user)) {
       message.channel.send(`${message.author}, thou art ${adj} ${noun}!`);
     } else {
       message.channel.send(`${member.user}, thou art ${adj} ${noun}!`);
@@ -127,4 +132,4 @@ client.on("message", async message => {
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+bot.login(process.env.DISCORD_TOKEN);
