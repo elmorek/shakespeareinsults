@@ -26,8 +26,6 @@ const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
-const features = require("./featurelist.json");
-let features = features;
 
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
@@ -76,10 +74,20 @@ client.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
-    client.connect();
-    client.query(`INSERT INTO features (description, status) VALUES (${message.content}, 'pending')`);
+    dbClient.connect();
+    const query = 'INSERT INTO features(description, status) VALUES($1, $2)';
+    const values = [message.content, 'pending'];
+    
+    dbClient.query(query, values, (err, res)) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        console.log(res.rows[0]);
+      }
+    }
+    dbClient.end();
   }
-  
+
   if(message.content.startsWith('listfeatures!')) {
     let listoffeatures = `List of features:\n\n`;
     for (var i = 0; i< features.features.length; i++) {
