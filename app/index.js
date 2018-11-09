@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-const Client = require('pg');
+const { Pool, Client } = require('pg');
 
 app.set('port', (process.env.PORT || 5000));
 
