@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-const { Client } = require('pg');
+const { Pool, Client } = require('pg');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -70,44 +70,31 @@ bot.on("message", async message => {
   }
 
   if(message.content.startsWith('addfeature!')) {
-    const client = new Client({
+    const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: true
     });
-    client.connect((err) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
-    const text = 'INSERT INTO features(description, status) VALUES($1, $2)';
+
+    const text = 'INSERT INTO features(description, status) VALUES($1, $2);';
     const values = [message.content, 'pending'];
     
-    client.query(text, values, (err, res) => {
+    pool.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack);
       } else {
         console.log(res.rows[0]);
       }
+      pool.end();
     });
-    client.end();
   }
 
   if(message.content.startsWith('listfeatures!')) {
-    const client = new Client({
+    const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: true
     });
     let listoffeatures = `List of features:\n\n`;
-    client.connect((err) => {
-      if (err) {
-        console.error('connection error', err.stack);
-      } else {
-        console.log('connected');
-      }
-    });
-    client.query('SELECT * FROM features', (err, res) => {
+    pool.query('SELECT * FROM features;', (err, res) => {
       if (err) {
         console.log(err.stack)
       } else {
@@ -115,9 +102,9 @@ bot.on("message", async message => {
           listoffeatures+=`**ID:** ${res.rows[i].id}\n**Description:** ${res.rows[i].description}\n\n**Status:** ${res.rows[i].status}`;
         }
       }
+      pool.end();
       message.channel.send(listoffeatures);
     });
-    client.end();
   }
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
