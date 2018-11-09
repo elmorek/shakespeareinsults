@@ -22,6 +22,7 @@ const bot = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
+console.log(process.env.DATABASE_URL);
 
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
