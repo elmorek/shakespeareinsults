@@ -101,6 +101,7 @@ bot.on("message", async message => {
       }
       message.channel.send(listoffeatures);
     });
+    client.end();
   }
   if(message.content.endsWith("Shakespeare!") == false && message.content.endsWith("Shakespeare?") == false ) return;
   
