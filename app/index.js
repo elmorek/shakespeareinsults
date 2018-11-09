@@ -76,13 +76,13 @@ bot.on("message", async message => {
     });
 
     const text = 'INSERT INTO features(description, status) VALUES($1, $2);';
-    const values = [message.content.trim(11), 'pending'];
+    const values = [message.content.slice(11), 'pending'];
     await client.connect();
     client.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack);
       } else {
-        console.log(res.rows[0]);
+        console.log(res.rows[0].id);
       }
       client.end();
     });
