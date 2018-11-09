@@ -22,7 +22,6 @@ const bot = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
-console.log(process.env.DATABASE_URL);
 
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
@@ -75,7 +74,13 @@ bot.on("message", async message => {
       connectionString: process.env.DATABASE_URL,
       ssl: true,
     });
-    client.connect();
+    client.connect((err) => {
+      if (err) {
+        console.error('connection error', err.stack);
+      } else {
+        console.log('connected');
+      }
+    });
     const text = 'INSERT INTO features(description, status) VALUES($1, $2)';
     const values = [message.content, 'pending'];
     
@@ -95,7 +100,13 @@ bot.on("message", async message => {
       ssl: true,
     });
     let listoffeatures = `List of features:\n\n`;
-    client.connect();
+    client.connect((err) => {
+      if (err) {
+        console.error('connection error', err.stack);
+      } else {
+        console.log('connected');
+      }
+    });
     client.query('SELECT * FROM features', (err, res) => {
       if (err) {
         console.log(err.stack)
