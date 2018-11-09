@@ -83,13 +83,15 @@ client.on("message", async message => {
         return console.log(err);
       }
     });
+    console.log(features);
   }
   if(message.content.startsWith('listfeatures!')) {
     const featurelist = require("./featurelist.json");
     let listoffeatures = ``;
     for (var i = 0; i< featurelist.features.length; i++) {
-      listoffeatures + `**id: ** ${featurelist.features[i].id}\n**description:** ${featurelist.features[i].description}\n**status:** ${featurelist.features[i].status}\n\n`;
+      listoffeatures+`**id: ** ${featurelist.features[i].id}\n**description:** ${featurelist.features[i].description}\n**status:** ${featurelist.features[i].status}\n\n`;
     }
+    console.log(listoffeatures);
     message.channel.send(listoffeatures);
   }
 
