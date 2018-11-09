@@ -72,7 +72,7 @@ bot.on("message", async message => {
   if(message.content.startsWith('addfeature!')) {
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: true,
+      ssl: true
     });
     client.connect((err) => {
       if (err) {
@@ -97,7 +97,7 @@ bot.on("message", async message => {
   if(message.content.startsWith('listfeatures!')) {
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      ssl: true,
+      ssl: true
     });
     let listoffeatures = `List of features:\n\n`;
     client.connect((err) => {
