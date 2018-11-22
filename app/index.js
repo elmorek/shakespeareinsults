@@ -1,7 +1,6 @@
 // Just to avoid Heroku crap
 const express = require('express');
 const app = express();
-const fs = require('fs');
 const { Pool, Client } = require('pg');
 
 app.set('port', (process.env.PORT || 5000));
@@ -20,11 +19,11 @@ const Discord = require("discord.js");
 // this is what we're refering to. Your client.
 const bot = new Discord.Client();
 
-// Here we load the config.json file that contains our token and our prefix values. 
-const config = require("./config.json");
+// Load the insults
+const insults = require("./insults.json");
 
-// config.token contains the bot's token
-// config.prefix contains the message prefix.
+//Load the private info such as DB URL and Bot Token
+const private = require("./private.json");
 
 bot.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
@@ -58,10 +57,8 @@ bot.on("message", async message => {
   // and not get into a spam loop (we call that "botception").
   if(message.author.bot) return;
   
-  // Also good practice to ignore any message that does not start with our prefix, 
-  // which is set in the configuration file.
-  var swearwords = config.insults;
-  var comebacks = config.comebacks;
+  var swearwords = insults.insults;
+  var comebacks = insults.comebacks;
   for (var i=0; i<swearwords.length; i++) {
     if (message.content.toLowerCase().includes(swearwords[i])) {
       message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
@@ -71,7 +68,7 @@ bot.on("message", async message => {
 
   if(message.content.startsWith('addfeature!')) {
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: private.DATABASE_URL,
       ssl: true
     });
 
@@ -121,10 +118,10 @@ bot.on("message", async message => {
   console.log(command);
   
   if(command === "shakespeare!" || "shakespeare?") {
-    randomAdj = getRandomNumber(0, config.adj.length);
-    randomNoun = getRandomNumber(0, config.noun.length);
-    let adj = config.adj[randomAdj];
-    let noun = config.noun[randomNoun];
+    randomAdj = getRandomNumber(0, insults.adj.length);
+    randomNoun = getRandomNumber(0, insults.noun.length);
+    let adj = insults.adj[randomAdj];
+    let noun = insults.noun[randomNoun];
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
     if (message.isMentioned(bot.user)) {
       message.channel.send(`${message.author}, thou art ${adj} ${noun}!`);
@@ -137,4 +134,4 @@ bot.on("message", async message => {
   }
 });
 
-bot.login(process.env.DISCORD_TOKEN);
+bot.login(private.DISCORD_TOKEN);
