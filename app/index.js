@@ -57,14 +57,14 @@ bot.on("message", async message => {
   // and not get into a spam loop (we call that "botception").
   if(message.author.bot) return;
   
-  var swearwords = insults.insults;
-  var comebacks = insults.comebacks;
-  for (var i=0; i<swearwords.length; i++) {
-    if (message.content.toLowerCase().includes(swearwords[i])) {
-      message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
-      break;
-    }
-  }
+  //var swearwords = insults.insults;
+  //var comebacks = insults.comebacks;
+  //for (var i=0; i<swearwords.length; i++) {
+    //if (message.content.toLowerCase().includes(swearwords[i])) {
+      //message.channel.send(`${message.author}${comebacks[getRandomNumber(0, comebacks.length)]}`);
+      //break;
+    //}
+  //}
 
   if(message.content.startsWith('addfeature!')) {
     const client = new Client({
